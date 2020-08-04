@@ -1,0 +1,27 @@
+{
+  "name": "matman-devtools",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:install": "cross-env install=true node scripts/index.js",
+    "build": "node scripts/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangjq4214/matman-devtools.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/wangjq4214/matman-devtools/issues"
+  },
+  "homepage": "https://github.com/wangjq4214/matman-devtools#readme",
+  "dependencies": {
+    "shelljs": "^0.8.4"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2"
+  }
+}
