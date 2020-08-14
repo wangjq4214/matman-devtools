@@ -2,9 +2,6 @@ import { useState } from 'react';
 import { createModel } from 'hox';
 
 function useOptions() {
-  // 元素跟踪
-  const [trace, setTrace] = useState(true);
-
   // 使用框架
   const [frameWork, setFrameWork] = useState(2);
 
@@ -12,8 +9,6 @@ function useOptions() {
   const [codeMode, setCodeMode] = useState([]);
 
   return {
-    trace,
-    setTrace,
     frameWork,
     setFrameWork,
     codeMode,

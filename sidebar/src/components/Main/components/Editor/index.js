@@ -16,7 +16,7 @@ const Index = () => {
 
   const { frameWork, codeMode } = useOptionsModel();
 
-  const { name } = useSelectorModel();
+  const { name, detail } = useSelectorModel();
 
   const resCode = useMemo(() => {
     let temp = {};
@@ -24,8 +24,8 @@ const Index = () => {
       temp[item] = true;
     });
 
-    return new Tpl(frameWork, name, temp).run();
-  }, [frameWork, codeMode, name]);
+    return new Tpl(frameWork, { name, detail }, temp).run();
+  }, [frameWork, codeMode, name, detail]);
 
   useEffect(() => {
     setCode(resCode);

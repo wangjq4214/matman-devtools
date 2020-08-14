@@ -10,7 +10,7 @@ const Index = () => {
     <Layout.Content style={{ padding: '50px', marginTop: 64 }}>
       <div
         className={styles.siteLayoutBackground}
-        style={{ padding: 24, minHeight: 380 }}
+        style={{ padding: 24, minHeight: 245 }}
       >
         <Options />
       </div>

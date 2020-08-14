@@ -1,46 +1,37 @@
 import template from 'lodash.template';
 
-const JQuery = `function getInfo() {
-  const result = {
-    isExist: $('<%= name %>').length > 0,
-  };
+const JQuery = `// [元素选择器]
+const selector = "<%= name %>";
 
-  if (!result.isExist) {
-    return result;
-  }
-<% if (type.text) { %>
-  result.text = $.trim($('<%= name %>').text())<% } %>
-<% if (type.length) { %>
-  result.length = $('<%= name %>').children().length<% } %>
+<% if (type.text) { %>// [文本内容]： <%= detail.text %>
+const text = $.trim($('<%= name %>').text());<% } %>
 
-  return result;
-}`;
+<% if (type.length) { %>// [匹配个数]： <%= detail.total %>
+const total = $('<%= name %>').children().length;<% } %>
 
-const utils = `function getInfo() {
-  const result = {
-    isExist: useJquery.isExist('<%= name %>'),
-  };
+// [是否存在]： <%= detail.exist %>
+const isExist = $('<%= name %>').length > 0;`;
 
-  if (!result.isExist) {
-    return result;
-  }
-<% if (type.text) { %>
-  result.text = useJquery.getText('<%= name %>');<% } %>
-<% if (type.length) { %>
-  result.length = useJquery.getTotal('<%= name %>');
-<% } %>
+const utils = `// [元素选择器]
+const selector = "<%= name %>";
 
-  return result;
-}`;
+<% if (type.text) { %>// [文本内容]： <%= detail.text %>
+const text = useJquery.getText("<%= name %>");<% } %>
+
+<% if (type.length) { %>// [匹配个数]： <%= detail.total %>
+const total = useJquery.getTotal("<%= name %>");<% } %>
+
+// [是否存在]： <%= detail.exist %>
+const isExist = useJquery.isExist("<%= name %>");`;
 
 class JQueryTpl {
   constructor(type) {
     this.type = type;
   }
 
-  run(name) {
+  run(name, detail) {
     const res = template(JQuery);
-    return res({ name, type: this.type });
+    return res({ name, detail, type: this.type });
   }
 }
 
@@ -49,15 +40,16 @@ class UtilsTpl {
     this.type = type;
   }
 
-  run(name) {
+  run(name, detail) {
     const res = template(utils);
-    return res({ name, type: this.type });
+    return res({ name, detail, type: this.type });
   }
 }
 
 export class Tpl {
-  constructor(frame = 2, name = 'body', type) {
-    this.name = name;
+  constructor(frame = 2, opts, type) {
+    this.name = opts.name;
+    this.detail = opts.detail;
     if (frame === 1) {
       this.frameTpl = new JQueryTpl(type);
     } else {
@@ -66,6 +58,6 @@ export class Tpl {
   }
 
   run() {
-    return this.frameTpl.run(this.name);
+    return this.frameTpl.run(this.name, this.detail);
   }
 }
