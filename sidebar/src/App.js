@@ -1,21 +1,14 @@
 /*global chrome*/
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Layout } from 'antd';
 import Header from './components/Header';
 import Options from './components/Main';
-import useOptionsModel from './models/options';
 import useSelectorModel from './models/selector';
 
 const elements = chrome.devtools.panels.elements;
 
 function App() {
-  const { trace } = useOptionsModel();
   const { setName } = useSelectorModel();
-  const refTrace = useRef(trace);
-
-  useEffect(() => {
-    refTrace.current = trace;
-  }, [trace]);
 
   useEffect(() => {
     const updateSelectElement = () => {
@@ -32,9 +25,7 @@ function App() {
         '[panel-sidbar.js][listenMsgFromContentScript] receive message',
         message
       );
-      if (refTrace.current) {
-        setName(message.data.selectorList[0]);
-      }
+      setName(message.data.selectorList[0]);
     });
   });
 

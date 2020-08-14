@@ -17,7 +17,7 @@ const Index = () => {
     <div
       ref={(el) => (scrollDiv.current = el)}
       style={{
-        minWidth: 300,
+        width: 300,
         height: '100%',
         backgroundColor: '#242424',
         overflow: 'scroll',

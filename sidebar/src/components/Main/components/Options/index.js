@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Switch, Radio, Checkbox, Divider } from 'antd';
+import { Typography, Radio, Checkbox, Divider } from 'antd';
 import useOptionsModel from '../../../../models/options';
 
 import styles from './index.module.less';
@@ -7,18 +7,7 @@ import styles from './index.module.less';
 const plainOptions = ['text', 'length'];
 
 const Index = () => {
-  const {
-    trace,
-    setTrace,
-    frameWork,
-    setFrameWork,
-    codeMode,
-    setCodeMode,
-  } = useOptionsModel();
-
-  const changeTrace = () => {
-    setTrace((s) => !s);
-  };
+  const { frameWork, setFrameWork, codeMode, setCodeMode } = useOptionsModel();
 
   const changeFrameWork = (e) => {
     setFrameWork(e.target.value);
@@ -31,17 +20,6 @@ const Index = () => {
   return (
     <>
       {/* 跟踪选项 */}
-      <div className={styles.area}>
-        <Typography.Title level={4}>是否跟踪选择</Typography.Title>
-        <Switch
-          checkedChildren="开启"
-          unCheckedChildren="关闭"
-          defaultChecked
-          checked={trace}
-          onChange={changeTrace}
-        />
-      </div>
-      <Divider />
       {/* jquery 和 utils 选项 */}
       <div className={styles.area}>
         <Typography.Title level={4}>选择使用的库</Typography.Title>

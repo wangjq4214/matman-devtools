@@ -27,7 +27,7 @@ function setSelectedElement(selectedDom) {
 
   // 获取相关数据
   const data = {
-    selectorList: [getSelector1(selectedDom)],
+    selectorList: [getSelector(selectedDom)],
     infoList: [
       {
         key: '文本内容',
@@ -97,9 +97,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   });
 });
 
-function getSelector1(dom) {
+function getSelector(dom) {
   let path;
   let i;
+  const originalDom = dom;
 
   for (path = '', i = 0; dom && dom.nodeType === 1; dom = dom.parentNode, i++) {
     // 有 id 的情况直接退出
@@ -117,7 +118,23 @@ function getSelector1(dom) {
     }
   }
 
-  return path.trim();
+  let result = path.trim();
+
+  // 注意，有可能会有多个结果，此时需要加上序号，确保唯一，
+  // 例如如果 #expTable .head th 有多个值，
+  // 则会追加序号来区别L #expTable .head th:nth-child(6)
+  const selectorAll = document.querySelectorAll(result);
+  if (selectorAll && selectorAll.length > 1) {
+    for (let index = 0; index < selectorAll.length; index++) {
+      const element = selectorAll[index];
+      if (element === originalDom) {
+        result = `${result}:nth-child(${index + 1})`;
+        break;
+      }
+    }
+  }
+
+  return result;
 }
 
 // 向页面中注入 JS
