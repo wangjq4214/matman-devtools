@@ -27,24 +27,12 @@ function setSelectedElement(selectedDom) {
 
   // 获取相关数据
   const data = {
-    selectorList: [getSelector(selectedDom)],
-    infoList: [
-      {
-        key: '文本内容',
-        value: $.trim($(selectedDom).text()),
-        type: 'getText',
-      },
-      {
-        key: '是否存在',
-        value: 'true',
-        type: 'isExist',
-      },
-      {
-        key: '直接子元素个数',
-        value: $(selectedDom).children().length,
-        type: 'getTotal',
-      },
-    ],
+    selector: getSelector(selectedDom),
+    info: {
+      text: $.trim($(selectedDom).text()),
+      exist: 'true',
+      total: $(selectedDom).children().length,
+    },
   };
 
   if (MATMAN_DEVTOOLS_DEBUG) {

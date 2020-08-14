@@ -8,7 +8,7 @@ import useSelectorModel from './models/selector';
 const elements = chrome.devtools.panels.elements;
 
 function App() {
-  const { setName } = useSelectorModel();
+  const { setName, setDetail } = useSelectorModel();
 
   useEffect(() => {
     const updateSelectElement = () => {
@@ -25,7 +25,8 @@ function App() {
         '[panel-sidbar.js][listenMsgFromContentScript] receive message',
         message
       );
-      setName(message.data.selectorList[0]);
+      setName(message.data.selector);
+      setDetail(message.data.info);
     });
   });
 
