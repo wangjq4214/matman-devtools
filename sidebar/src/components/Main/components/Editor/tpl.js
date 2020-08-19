@@ -41,8 +41,9 @@ class UtilsTpl {
   }
 
   run(name, detail) {
-    const res = template(utils);
-    return res({ name, detail, type: this.type });
+    // const res = template(utils);
+    // return res({ name, detail, type: this.type });
+    return detail.sampleCode;
   }
 }
 

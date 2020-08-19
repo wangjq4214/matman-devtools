@@ -1,6 +1,9 @@
 console.log('[matman-devtools] content scripts loaded');
 
 const MATMAN_DEVTOOLS_DEBUG = true;
+const WEB_CRAWL_UTIL_VERSION = '1.0.2';
+
+console.log(`[matman-devtools] web-crawl-util v${WEB_CRAWL_UTIL_VERSION}`);
 
 /**
  * 消息类型
@@ -25,15 +28,20 @@ function setSelectedElement(selectedDom) {
 
   matmanDevtoolsSelectedDom = selectedDom;
 
+  const selector = getSelector(selectedDom);
+
   // 获取相关数据
   const data = {
-    selector: getSelector(selectedDom),
+    selector,
     info: {
       text: $.trim($(selectedDom).text()),
       exist: 'true',
       total: $(selectedDom).children().length,
+      sampleCode: createSampleCodeBySelector(selector),
     },
   };
+
+  console.log('==data==', data);
 
   if (MATMAN_DEVTOOLS_DEBUG) {
     console.log('[matman-devtools] selected dom data', data);
@@ -85,6 +93,12 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   });
 });
 
+/**
+ * 通过选择的 DOM ，获得 selector 选择器
+ *
+ * @param {DOM} dom
+ * @returns {String}
+ */
 function getSelector(dom) {
   let path;
   let i;
@@ -125,6 +139,45 @@ function getSelector(dom) {
   return result;
 }
 
+/**
+ * 通过制定的 selector 生成代码
+ *
+ * @param {String} selector
+ */
+function createSampleCodeBySelector(selector) {
+  const result = [];
+  const { useJquery } = window.webCrawlUtil || {};
+
+  result.push(`// [元素选择器]： ${selector}`);
+  result.push(`const selector = "${selector}";`);
+  result.push('');
+
+  if (typeof useJquery !== 'undefined') {
+    result.push(`/* [文本内容]：`);
+    result.push(`${useJquery.getText(selector)}`);
+    result.push(`*/`);
+    result.push(`const text = useJquery.getText("${selector}");`);
+    result.push('');
+
+    result.push(`// [匹配个数]： ${useJquery.getTotal(selector)}`);
+    result.push(`const total = useJquery.getTotal("${selector}");`);
+    result.push('');
+
+    result.push(`// [是否存在]： ${useJquery.isExist(selector)}`);
+    result.push(`const isExist = useJquery.isExist("${selector}");`);
+    result.push('');
+
+    result.push(`// [是否存在]： ${useJquery.isExist(selector)}`);
+    result.push(`const isExist = useJquery.isExist("${selector}");`);
+    result.push('');
+  } else {
+    result.push(`// window.webCrawlUtil.useJquery 不存在`);
+    result.push('');
+  }
+
+  return result.join('\n');
+}
+
 // 向页面中注入 JS
 function injectCustomJs(jsPath) {
   jsPath = jsPath || 'js/inject.js';
@@ -142,4 +195,4 @@ function injectCustomJs(jsPath) {
 
 injectCustomJs('lodash.min.js');
 
-injectCustomJs('useJquery.min.js');
+injectCustomJs(`web-crawl-util.${WEB_CRAWL_UTIL_VERSION}.min.js`);

@@ -1,6 +1,5 @@
 {
   "name": "matman-devtools",
-  "version": "1.0.0",
   "description": "chrome devtools for matman",
   "private": false,
   "scripts": {
