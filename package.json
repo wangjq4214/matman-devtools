@@ -1,23 +1,26 @@
 {
   "name": "matman-devtools",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "chrome devtools for matman",
+  "private": false,
   "scripts": {
     "build": "cross-env install=true node scripts/index.js",
     "build:uninstall": "node scripts/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wangjq4214/matman-devtools.git"
+    "url": "git+https://github.com/matmanjs/matman-devtools.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "matman",
+    "devtool",
+    "e2e"
+  ],
+  "author": "helinjiang",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wangjq4214/matman-devtools/issues"
+    "url": "https://github.com/matmanjs/matman-devtools/issues"
   },
-  "homepage": "https://github.com/wangjq4214/matman-devtools#readme",
+  "homepage": "https://github.com/matmanjs/matman-devtools#readme",
   "dependencies": {
     "shelljs": "^0.8.4"
   },

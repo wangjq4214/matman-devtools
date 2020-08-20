@@ -10,6 +10,7 @@ const elements = chrome.devtools.panels.elements;
 function App() {
   const { setName, setDetail } = useSelectorModel();
 
+  // 注意，只能执行一次！！！！
   useEffect(() => {
     const updateSelectElement = () => {
       chrome.devtools.inspectedWindow.eval('setSelectedElement($0)', {
@@ -28,7 +29,8 @@ function App() {
       setName(message.data.selector);
       setDetail(message.data.info);
     });
-  });
+  }, []);
+
 
   return (
     <Layout>

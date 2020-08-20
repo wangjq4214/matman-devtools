@@ -16,10 +16,10 @@ const cwd = process.cwd();
     const current = path.resolve(cwd, item);
 
     if (isInstall) {
-      shelljs.exec('tnpm i', { cwd: current });
+      shelljs.exec('npm i', { cwd: current });
     }
 
-    shelljs.exec('tnpm run build', { cwd: current });
+    shelljs.exec('npm run build', { cwd: current });
 
     shelljs.cp(
       '-r',
