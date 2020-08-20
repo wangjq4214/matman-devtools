@@ -69,8 +69,6 @@ const Index = () => {
   const {
     codeStyleType,
     handleChangeCodeStyleType,
-    selectorName,
-    parentSelectorName,
     webCrawlUtilVersion,
   } = useOptionsModel();
 
