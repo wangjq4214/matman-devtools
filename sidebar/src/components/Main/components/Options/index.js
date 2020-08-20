@@ -94,9 +94,7 @@ const Index = () => {
           <Radio value={3}>包含父级</Radio>
         </Radio.Group>
       </div>
-      {frameStyle === 1 ? null : <Divider />}
       <div>{main}</div>
-      <Divider />
       <div>
         {selectorName}-{parentName}
       </div>

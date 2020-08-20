@@ -1,6 +1,7 @@
 console.log('[matman-devtools] content scripts loaded');
 
-const MATMAN_DEVTOOLS_DEBUG = true;
+ // TODO 调试标记应该由面板控制
+const MATMAN_DEVTOOLS_DEBUG = false;
 const WEB_CRAWL_UTIL_VERSION = '1.1.0';
 
 console.log(`[matman-devtools] web-crawl-util v${WEB_CRAWL_UTIL_VERSION}`);
@@ -41,8 +42,6 @@ function setSelectedElement(selectedDom) {
       sampleCode: createSampleCodeBySelector(selector),
     },
   };
-
-  console.log('==data==', data);
 
   if (MATMAN_DEVTOOLS_DEBUG) {
     console.log('[matman-devtools] selected dom data', data);
