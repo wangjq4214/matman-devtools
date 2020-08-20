@@ -8,8 +8,17 @@ function useConsole() {
   ]);
 
   const handelConsole = (data) => {
+    let temp = [];
+    if (data instanceof Array) {
+      temp = data.map((item) => {
+        return { method: 'log', data: [item] };
+      });
+    } else {
+      temp.push({ method: 'log', data: [data] });
+    }
+
     setConsoleData((s) => {
-      return [...s, { method: 'log', data: [data] }];
+      return [...s, ...temp];
     });
   };
 

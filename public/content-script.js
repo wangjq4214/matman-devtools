@@ -13,6 +13,7 @@ const MATMAN_DEVTOOLS_MESSAGE_TYPE = {
   SEND_RESPONSE_GET_TIPS: 'CONTENT_SCRIPT_SEND_RESPONSE_GET_TIPS',
   SEND_MESSAGE_AFTER_SELECTED_ELEMENT:
     'CONTENT_SCRIPT_SEND_MESSAGE_AFTER_SELECTED_ELEMENT',
+  SEND_MESSAGE_PROXY_CONSOLE_LOG: 'SEND_MESSAGE_PROXY_CONSOLE_LOG',
 };
 
 let matmanDevtoolsSelectedDom;
@@ -51,6 +52,16 @@ function setSelectedElement(selectedDom) {
   chrome.runtime.sendMessage({
     type: MATMAN_DEVTOOLS_MESSAGE_TYPE.SEND_MESSAGE_AFTER_SELECTED_ELEMENT,
     data: data,
+  });
+}
+
+/**
+ * 劫持 console.log
+ */
+function proxyConsole(...args) {
+  chrome.runtime.sendMessage({
+    type: MATMAN_DEVTOOLS_MESSAGE_TYPE.SEND_MESSAGE_PROXY_CONSOLE_LOG,
+    data: args,
   });
 }
 
@@ -157,9 +168,11 @@ function createSampleCodeBySelector(selector) {
     result.push(`const isExist = useJquery.isExist("${selector}");`);
     result.push('');
 
-    if ($(selector).is('input')
-      || $(selector).is('select')
-      || $(selector).is('textarea')) {
+    if (
+      $(selector).is('input') ||
+      $(selector).is('select') ||
+      $(selector).is('textarea')
+    ) {
       result.push(`/* [获得 input/select/textarea 元素中的值]：`);
       result.push(`${useJquery.getVal(selector)}`);
       result.push(`*/`);
@@ -169,7 +182,9 @@ function createSampleCodeBySelector(selector) {
       const imageDomUrl = useJquery.getImageDomUrl(selector);
       if (imageDomUrl) {
         result.push(`// [img 标签中图片的地址]： ${imageDomUrl}`);
-        result.push(`const imageDomUrl = useJquery.getImageDomUrl("${selector}");`);
+        result.push(
+          `const imageDomUrl = useJquery.getImageDomUrl("${selector}");`
+        );
         result.push('');
       }
     } else if ($(selector).is('table')) {
@@ -178,7 +193,9 @@ function createSampleCodeBySelector(selector) {
         result.push(`/* [获得table表格中的数据]：`);
         result.push(`${JSON.stringify(dataFromTable)}`);
         result.push(`*/`);
-        result.push(`const dataFromTable = useJquery.getDataFromTable("${selector}");`);
+        result.push(
+          `const dataFromTable = useJquery.getDataFromTable("${selector}");`
+        );
         result.push('');
       }
     } else {
@@ -193,14 +210,21 @@ function createSampleCodeBySelector(selector) {
     result.push(`const total = useJquery.getTotal("${selector}");`);
     result.push('');
 
-    result.push(`// [获得dom上的属性，举例获取 class]： ${useJquery.getAttr('class', selector)}`);
+    result.push(
+      `// [获得dom上的属性，举例获取 class]： ${useJquery.getAttr(
+        'class',
+        selector
+      )}`
+    );
     result.push(`const attrClass = useJquery.getAttr('class',"${selector}");`);
     result.push('');
 
     const styleObj = useJquery.getStyle(selector);
     result.push(`/* [dom 元素中的部分计算属性值]：`);
     result.push(`${JSON.stringify(styleObj, null, 2)}`);
-    result.push(`注意：你也可以通过 useJquery.getComputedStyle("${selector}") 方法获得更多计算属性`);
+    result.push(
+      `注意：你也可以通过 useJquery.getComputedStyle("${selector}") 方法获得更多计算属性`
+    );
     result.push(`*/`);
     result.push(`const styleObj = useJquery.getStyle("${selector}");`);
     result.push('');
@@ -208,10 +232,11 @@ function createSampleCodeBySelector(selector) {
     const backgroundImageUrl = useJquery.getBackgroundImageUrl(selector);
     if (backgroundImageUrl) {
       result.push(`// [背景图地址]： ${backgroundImageUrl}`);
-      result.push(`const backgroundImageUrl = useJquery.getBackgroundImageUrl("${selector}");`);
+      result.push(
+        `const backgroundImageUrl = useJquery.getBackgroundImageUrl("${selector}");`
+      );
       result.push('');
     }
-
   } else {
     result.push(`// window.webCrawlUtil.useJquery 不存在`);
     result.push('');

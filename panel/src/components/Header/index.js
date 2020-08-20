@@ -14,9 +14,18 @@ const Index = () => {
 
   const exec = () => {
     chrome.devtools.inspectedWindow.eval(
-      `var module = {};
+      `const matmanLogger = console.log;
+      console.log = proxyConsole;
+      var module = {};
       ${code};
-      module.exports();`,
+      try {
+        module.exports();
+        console.log = matmanLogger;
+      } catch(e) {
+        console.log = matmanLogger;
+        throw e;
+      }`,
+      { useContentScriptContext: true },
       (result, isException) => {
         console.log(result, isException);
         handelConsole(result || isException);
