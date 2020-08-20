@@ -15,20 +15,28 @@ function App() {
     setSelector,
     selectorName,
     parentSelectorName,
+    selectedParentSelector,
+    codeStyleType,
   } = useOptionsModel();
+
+  const updateSelectElement = () => {
+    const opts = {
+      selectorName,
+      parentSelectorName,
+      selectedParentSelector,
+      codeStyleType,
+    };
+
+    chrome.devtools.inspectedWindow.eval(
+      `setSelectedElement($0, ${JSON.stringify(opts)})`,
+      {
+        useContentScriptContext: true,
+      }
+    );
+  };
 
   // 注意，只能执行一次！！！！
   useEffect(() => {
-    const updateSelectElement = () => {
-      const opts = {
-        selectorName,
-        parentSelectorName,
-      };
-      
-      chrome.devtools.inspectedWindow.eval(`setSelectedElement($0, ${JSON.stringify(opts)})`, {
-        useContentScriptContext: true,
-      });
-    };
     // 选择的元素变化时
     // https://developer.chrome.com/extensions/devtools_panels#method-ExtensionSidebarPane-onSelectionChanged
     elements.onSelectionChanged.addListener(updateSelectElement);
@@ -46,6 +54,11 @@ function App() {
       }
     });
   }, []);
+
+  // 注意，在这几个值变化的时候重新生成代码
+  useEffect(() => {
+    updateSelectElement();
+  }, [selectorName, parentSelectorName, selectedParentSelector, codeStyleType]);
 
   return (
     <Layout>
