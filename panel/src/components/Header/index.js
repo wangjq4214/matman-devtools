@@ -13,21 +13,35 @@ const Index = () => {
   const { fullPage, handleFullPage } = useFullPageModel();
 
   const exec = () => {
+    // https://developer.chrome.com/extensions/devtools_inspectedWindow
     chrome.devtools.inspectedWindow.eval(
-      `const matmanLogger = console.log;
-      console.log = proxyConsole;
-      var module = {};
-      ${code};
-      try {
-        module.exports();
-        console.log = matmanLogger;
-      } catch(e) {
-        console.log = matmanLogger;
-        throw e;
-      }`,
+      `
+      (function(){
+        var matmanLogger = console.log;
+        console.log = proxyConsole;
+        var module = {};
+        var useJquery = window.webCrawlUtil && window.webCrawlUtil.useJquery;
+        var result;
+        ${code};
+        try {
+          if(typeof module.exports==='function'){
+            result = module.exports();
+          }
+
+          console.log = matmanLogger;
+        } catch(e) {
+          console.log = matmanLogger;
+          throw e;
+        }
+        return result;
+      })()
+      `,
       { useContentScriptContext: true },
       (result, isException) => {
+        // 只会在该 devtools.html 的 console 中出现
         console.log(result, isException);
+
+        // 在 matman console 中打印
         handelConsole(result || isException);
       }
     );

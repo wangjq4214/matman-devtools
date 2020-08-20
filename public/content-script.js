@@ -65,6 +65,30 @@ function proxyConsole(...args) {
   });
 }
 
+/**
+ * 向页面中注入一些自定义的代码以便调试
+ */
+function injectScriptToContentPage() {
+  // 向页面中注入 JS
+  function injectCustomJs(jsPath) {
+    jsPath = jsPath || 'js/inject.js';
+
+    var temp = document.createElement('script');
+    temp.setAttribute('type', 'text/javascript');
+    temp.src = chrome.extension.getURL(jsPath);
+
+    temp.onload = function () {
+      this.parentNode.removeChild(this);
+    };
+
+    document.body.appendChild(temp);
+  }
+
+  injectCustomJs('lodash.min.js');
+  injectCustomJs('jquery.3.3.1.min.js');
+  injectCustomJs(`web-crawl-util.${WEB_CRAWL_UTIL_VERSION}.min.js`);
+}
+
 // 监听来自 DevTools page 的消息，然后再回调信息
 // 例如可获取到 DOM 或 window 等信息，再传回到 DevTools page 做展示
 // DevTools page 通过 chrome.tabs.sendMessage 来发送消息
@@ -244,22 +268,3 @@ function createSampleCodeBySelector(selector) {
 
   return result.join('\n');
 }
-
-// 向页面中注入 JS
-function injectCustomJs(jsPath) {
-  jsPath = jsPath || 'js/inject.js';
-
-  var temp = document.createElement('script');
-  temp.setAttribute('type', 'text/javascript');
-  temp.src = chrome.extension.getURL(jsPath);
-
-  temp.onload = function () {
-    this.parentNode.removeChild(this);
-  };
-
-  document.body.appendChild(temp);
-}
-
-injectCustomJs('lodash.min.js');
-
-injectCustomJs(`web-crawl-util.${WEB_CRAWL_UTIL_VERSION}.min.js`);
