@@ -1,9 +1,6 @@
-import React, { useMemo, useEffect } from 'react';
+import React from 'react';
 import MonacoEditor from 'react-monaco-editor';
-import useOptionsModel from '../../../../models/options';
-import useSelectorModel from '../../../../models/selector';
 import useCodeModel from '../../../../models/code';
-import { Tpl } from './tpl';
 
 const options = {
   fontSize: 18,
@@ -12,24 +9,7 @@ const options = {
 };
 
 const Index = () => {
-  const { code, setCode } = useCodeModel();
-
-  const { frameWork, codeMode } = useOptionsModel();
-
-  const { name, detail } = useSelectorModel();
-
-  const resCode = useMemo(() => {
-    let temp = {};
-    codeMode.forEach((item) => {
-      temp[item] = true;
-    });
-
-    return new Tpl(frameWork, { name, detail }, temp).run();
-  }, [frameWork, codeMode, name, detail]);
-
-  useEffect(() => {
-    setCode(resCode);
-  }, [setCode, resCode]);
+  const { code } = useCodeModel();
 
   return (
     <>
