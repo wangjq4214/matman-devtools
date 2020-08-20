@@ -21,12 +21,20 @@ function useOptions() {
   const [selectorName, setSelectorName] = useState('selector');
 
   // 父级选择器名称
-  const [parentName, setParentName] = useState('parentSelector');
+  const [parentSelectorName, setParentSelectorName] = useState(
+    'parentSelector'
+  );
 
   // editor height
   const [editorHeight, setEditorHeight] = useState(
     document.body.offsetHeight - headerHeightMap[frameStyle]
   );
+
+  // 当前选中的 selector
+  const [selector, setSelector] = useState('');
+
+  // web-crawl-util 版本号
+  const [webCrawlUtilVersion, setWebCrawlUtilVersion] = useState('');
 
   // 父级选择器列表
   const [parentList, setParentList] = useState(['body', 'body #root']);
@@ -46,14 +54,18 @@ function useOptions() {
     handleChangeFrameStyle,
     selectorName,
     setSelectorName,
-    parentName,
-    setParentName,
+    parentSelectorName,
+    setParentSelectorName,
     parentList,
     setParentList,
     selectIndex,
     setSelectIndex,
     editorHeight,
     setEditorHeight,
+    selector,
+    setSelector,
+    webCrawlUtilVersion,
+    setWebCrawlUtilVersion,
   };
 }
 

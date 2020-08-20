@@ -36,9 +36,7 @@ function setSelectedElement(selectedDom) {
   const data = {
     selector,
     info: {
-      text: $.trim($(selectedDom).text()),
-      exist: 'true',
-      total: $(selectedDom).children().length,
+      webCrawlUtilVersion: WEB_CRAWL_UTIL_VERSION,
       sampleCode: createSampleCodeBySelector(selector),
     },
   };

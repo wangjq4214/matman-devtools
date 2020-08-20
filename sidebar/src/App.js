@@ -4,11 +4,13 @@ import { Layout } from 'antd';
 
 import Main from './components/Main';
 import useCodeModel from './models/code';
+import useOptionsModel from './models/options';
 
 const elements = chrome.devtools.panels.elements;
 
 function App() {
   const { setCode } = useCodeModel();
+  const { setWebCrawlUtilVersion, setSelector } = useOptionsModel();
 
   // 注意，只能执行一次！！！！
   useEffect(() => {
@@ -28,6 +30,8 @@ function App() {
       if (
         message.type === 'CONTENT_SCRIPT_SEND_MESSAGE_AFTER_SELECTED_ELEMENT'
       ) {
+        setSelector(message.data.selector);
+        setWebCrawlUtilVersion(message.data.info.webCrawlUtilVersion);
         setCode(message.data.info.sampleCode);
       }
     });

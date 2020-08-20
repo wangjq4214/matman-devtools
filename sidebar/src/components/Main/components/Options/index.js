@@ -24,8 +24,8 @@ const Select = () => {
 
 const Parent = () => {
   const {
-    parentName,
-    setParentName,
+    parentSelectorName,
+    setParentSelectorName,
     parentList,
     selectIndex,
     setSelectIndex,
@@ -38,9 +38,9 @@ const Parent = () => {
         <Input
           addonBefore="父级变量名"
           placeholder="请输入父级变量名"
-          defaultValue={parentName}
+          defaultValue={parentSelectorName}
           onChange={(e) => {
-            setParentName(e.target.value);
+            setParentSelectorName(e.target.value);
           }}
         />
       </div>
@@ -52,10 +52,9 @@ const Parent = () => {
       >
         {parentList.map((item, index) => {
           return (
-            <React.Fragment key={item}>
-              <Radio value={index + 1}>{item}</Radio>
-              <br />
-            </React.Fragment>
+            <Radio key={item} value={index + 1}>
+              {item}
+            </Radio>
           );
         })}
       </Radio.Group>
@@ -68,7 +67,8 @@ const Index = () => {
     frameStyle,
     handleChangeFrameStyle,
     selectorName,
-    parentName,
+    parentSelectorName,
+    webCrawlUtilVersion,
   } = useOptionsModel();
 
   const changeFrameWork = (e) => {
@@ -87,16 +87,18 @@ const Index = () => {
   return (
     <>
       <div>
-        <Typography.Title level={4}>选择风格</Typography.Title>
+        <Typography.Title level={4}>
+          matman 爬虫小助手，请选择风格（web-crawl-util v{webCrawlUtilVersion}）
+        </Typography.Title>
         <Radio.Group value={frameStyle} onChange={changeFrameWork}>
           <Radio value={1}>默认</Radio>
-          <Radio value={2}>变量</Radio>
-          <Radio value={3}>包含父级</Radio>
+          <Radio value={2}>使用变量</Radio>
+          <Radio value={3}>包含父级变量</Radio>
         </Radio.Group>
       </div>
       <div>{main}</div>
       <div>
-        {selectorName}-{parentName}
+        {selectorName}-{parentSelectorName}
       </div>
     </>
   );
