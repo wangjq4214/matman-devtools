@@ -10,12 +10,22 @@ const elements = chrome.devtools.panels.elements;
 
 function App() {
   const { setCode } = useCodeModel();
-  const { setWebCrawlUtilVersion, setSelector } = useOptionsModel();
+  const {
+    setWebCrawlUtilVersion,
+    setSelector,
+    selectorName,
+    parentSelectorName,
+  } = useOptionsModel();
 
   // 注意，只能执行一次！！！！
   useEffect(() => {
     const updateSelectElement = () => {
-      chrome.devtools.inspectedWindow.eval('setSelectedElement($0)', {
+      const opts = {
+        selectorName,
+        parentSelectorName,
+      };
+      
+      chrome.devtools.inspectedWindow.eval(`setSelectedElement($0, ${JSON.stringify(opts)})`, {
         useContentScriptContext: true,
       });
     };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Divider } from 'antd';
+import { Layout } from 'antd';
 import Options from './components/Options';
 import Editor from './components/Editor';
 import useOptionsModel from '../../models/options';

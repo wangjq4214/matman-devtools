@@ -1,7 +1,7 @@
 console.log('[matman-devtools] content scripts loaded');
 
- // TODO 调试标记应该由面板控制
-const MATMAN_DEVTOOLS_DEBUG = false;
+// TODO 调试标记应该由面板控制
+const MATMAN_DEVTOOLS_DEBUG = true;
 const WEB_CRAWL_UTIL_VERSION = '1.1.0';
 
 console.log(`[matman-devtools] web-crawl-util v${WEB_CRAWL_UTIL_VERSION}`);
@@ -22,10 +22,16 @@ let matmanDevtoolsSelectedDom;
 /**
  * 设置当前选中的元素，由 DevTools 传递过来
  * @param selectedDom 当前选中的 DOM 元素
+ * @param opts 额外参数
  */
-function setSelectedElement(selectedDom) {
+function setSelectedElement(selectedDom, opts) {
   if (MATMAN_DEVTOOLS_DEBUG) {
-    console.log('[matman-devtools] selected dom', selectedDom);
+    console.log(
+      '[matman-devtools] selected dom',
+      selectedDom,
+      opts,
+      typeof opts // object
+    );
   }
 
   matmanDevtoolsSelectedDom = selectedDom;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Radio, Divider, Input } from 'antd';
+import { Typography, Radio, Input } from 'antd';
 import useOptionsModel from '../../../../models/options';
 
 import styles from './index.module.less';
@@ -26,10 +26,12 @@ const Parent = () => {
   const {
     parentSelectorName,
     setParentSelectorName,
-    parentList,
-    selectIndex,
-    setSelectIndex,
+    selectedParentSelector,
+    setSelectedParentSelector,
+    selector,
   } = useOptionsModel();
+
+  const parentSelectorList = getParentSelectorList(selector);
 
   return (
     <>
@@ -47,12 +49,13 @@ const Parent = () => {
 
       <Typography.Title level={4}>父级</Typography.Title>
       <Radio.Group
-        value={selectIndex}
-        onChange={(e) => setSelectIndex(e.target.value)}
+        value={selectedParentSelector || parentSelectorList[0]}
+        defaultValue={parentSelectorList[0]}
+        onChange={(e) => setSelectedParentSelector(e.target.value)}
       >
-        {parentList.map((item, index) => {
+        {parentSelectorList.map((item, index) => {
           return (
-            <Radio key={item} value={index + 1}>
+            <Radio key={item} value={item}>
               {item}
             </Radio>
           );
@@ -64,23 +67,23 @@ const Parent = () => {
 
 const Index = () => {
   const {
-    frameStyle,
-    handleChangeFrameStyle,
+    codeStyleType,
+    handleChangeCodeStyleType,
     selectorName,
     parentSelectorName,
     webCrawlUtilVersion,
   } = useOptionsModel();
 
   const changeFrameWork = (e) => {
-    handleChangeFrameStyle(e.target.value);
+    handleChangeCodeStyleType(e.target.value);
   };
 
   // 选择器填写区域
   let main = null;
 
-  if (frameStyle === 2) {
+  if (codeStyleType === 2) {
     main = <Select />;
-  } else if (frameStyle === 3) {
+  } else if (codeStyleType === 3) {
     main = <Parent />;
   }
 
@@ -90,18 +93,38 @@ const Index = () => {
         <Typography.Title level={4}>
           matman 爬虫小助手，请选择风格（web-crawl-util v{webCrawlUtilVersion}）
         </Typography.Title>
-        <Radio.Group value={frameStyle} onChange={changeFrameWork}>
+        <Radio.Group value={codeStyleType} onChange={changeFrameWork}>
           <Radio value={1}>默认</Radio>
           <Radio value={2}>使用变量</Radio>
           <Radio value={3}>包含父级变量</Radio>
         </Radio.Group>
       </div>
       <div>{main}</div>
-      <div>
-        {selectorName}-{parentSelectorName}
-      </div>
     </>
   );
 };
+
+function getParentSelectorList(selector = '') {
+  const arr = selector.split(/\s+/);
+
+  const actualSelectorArr = [];
+  const result = [];
+  for (let i = 0; i < arr.length; i++) {
+    const item = arr[i].trim();
+    if (item) {
+      actualSelectorArr.push(item);
+  
+      if (!result.length) {
+        result.push(item);
+      } else {
+        result.push(`${result[result.length - 1]} ${item}`);
+      }
+    }
+  }
+
+  return result.filter(
+    (item) => !/>$/.test(item) && item !== actualSelectorArr.join(' ')
+  );
+}
 
 export default Index;
