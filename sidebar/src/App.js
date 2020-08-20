@@ -3,12 +3,12 @@ import React, { useEffect } from 'react';
 import { Layout } from 'antd';
 import Header from './components/Header';
 import Options from './components/Main';
-import useSelectorModel from './models/selector';
+import useCodeModel from './models/code';
 
 const elements = chrome.devtools.panels.elements;
 
 function App() {
-  const { setName, setDetail } = useSelectorModel();
+  const { setCode } = useCodeModel();
 
   // 注意，只能执行一次！！！！
   useEffect(() => {
@@ -17,7 +17,6 @@ function App() {
         useContentScriptContext: true,
       });
     };
-
     // 选择的元素变化时
     // https://developer.chrome.com/extensions/devtools_panels#method-ExtensionSidebarPane-onSelectionChanged
     elements.onSelectionChanged.addListener(updateSelectElement);
@@ -26,11 +25,13 @@ function App() {
         '[panel-sidbar.js][listenMsgFromContentScript] receive message',
         message
       );
-      setName(message.data.selector);
-      setDetail(message.data.info);
+      if (
+        message.type === 'CONTENT_SCRIPT_SEND_MESSAGE_AFTER_SELECTED_ELEMENT'
+      ) {
+        setCode(message.data.info.sampleCode);
+      }
     });
   }, []);
-
 
   return (
     <Layout>

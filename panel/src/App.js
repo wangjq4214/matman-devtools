@@ -1,42 +1,24 @@
-// /*global chrome*/
-import React from 'react';
+/*global chrome*/
+import React, { useEffect } from 'react';
 import { Layout } from 'antd';
 import Header from './components/Header';
 import Options from './components/Main';
-// import useOptionsModel from './models/options';
-// import useSelectorModel from './models/selector';
-
-// const elements = chrome.devtools.panels.elements;
+import useConsoleModel from './models/console';
 
 function App() {
-  // const { trace } = useOptionsModel();
-  // const { setName } = useSelectorModel();
-  // const refTrace = useRef(trace);
+  const { handelConsole } = useConsoleModel();
 
-  // useEffect(() => {
-  //   refTrace.current = trace;
-  // }, [trace]);
-
-  // useEffect(() => {
-  //   const updateSelectElement = () => {
-  //     chrome.devtools.inspectedWindow.eval('setSelectedElement($0)', {
-  //       useContentScriptContext: true,
-  //     });
-  //   };
-
-  //   // 选择的元素变化时
-  //   // https://developer.chrome.com/extensions/devtools_panels#method-ExtensionSidebarPane-onSelectionChanged
-  //   elements.onSelectionChanged.addListener(updateSelectElement);
-  //   chrome.runtime.onMessage.addListener(function (message) {
-  //     console.log(
-  //       '[panel-sidbar.js][listenMsgFromContentScript] receive message',
-  //       message
-  //     );
-  //     if (refTrace.current) {
-  //       setName(message.data.selectorList[0]);
-  //     }
-  //   });
-  // });
+  useEffect(() => {
+    chrome.runtime.onMessage.addListener(function (message) {
+      console.log(
+        '[panel-sidbar.js][listenMsgFromContentScript] receive message',
+        message
+      );
+      if (message.type === 'SEND_MESSAGE_PROXY_CONSOLE_LOG') {
+        handelConsole(message.data);
+      }
+    });
+  }, []);
 
   return (
     <Layout>

@@ -8,10 +8,7 @@ import styles from './index.module.less';
 const Index = () => {
   return (
     <Layout.Content style={{ padding: '50px', marginTop: 64 }}>
-      <div
-        className={styles.siteLayoutBackground}
-        style={{ padding: 24, minHeight: 245 }}
-      >
+      <div className={styles.siteLayoutBackground} style={{ padding: 24 }}>
         <Options />
       </div>
       <Divider />
