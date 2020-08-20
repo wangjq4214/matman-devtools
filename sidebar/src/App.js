@@ -25,7 +25,11 @@ function App() {
         '[panel-sidbar.js][listenMsgFromContentScript] receive message',
         message
       );
-      setCode(message.data.info.sampleCode);
+      if (
+        message.type === 'CONTENT_SCRIPT_SEND_MESSAGE_AFTER_SELECTED_ELEMENT'
+      ) {
+        setCode(message.data.info.sampleCode);
+      }
     });
   }, []);
 
