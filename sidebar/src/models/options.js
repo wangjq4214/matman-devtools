@@ -1,10 +1,16 @@
 import { useState } from 'react';
 import { createModel } from 'hox';
 
+const STYLE_TYPE = {
+  DEFAULT: 1,
+  SELECTOR: 2,
+  PARENT: 3,
+};
+
 const headerHeightMap = {
-  1: 130,
-  2: 200,
-  3: 300,
+  [STYLE_TYPE.DEFAULT]: 130 - 10,
+  [STYLE_TYPE.SELECTOR]: 200 - 10,
+  [STYLE_TYPE.PARENT]: 300 - 10,
 };
 
 function useOptions() {
@@ -12,21 +18,21 @@ function useOptions() {
   const [frameStyle, setFrameStyle] = useState(1);
 
   // 选择器变量名称
-  const [selectorName, setSelectorName] = useState('');
+  const [selectorName, setSelectorName] = useState('selector');
 
   // 父级选择器名称
-  const [parentName, setParentName] = useState('');
+  const [parentName, setParentName] = useState('parentSelector');
 
   // editor height
-  const [editorHeight, setEditorHeight] = useState(document.body.offsetHeight - headerHeightMap[frameStyle]);
+  const [editorHeight, setEditorHeight] = useState(
+    document.body.offsetHeight - headerHeightMap[frameStyle]
+  );
 
   // 父级选择器列表
   const [parentList, setParentList] = useState(['body', 'body #root']);
   const [selectIndex, setSelectIndex] = useState(1);
 
   const handleChangeFrameStyle = (val) => {
-    setSelectorName('');
-    setParentName('');
     setFrameStyle(val);
 
     // 每次切换代码风格时，重新计算代码编辑区域的高度

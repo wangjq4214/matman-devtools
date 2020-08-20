@@ -13,7 +13,7 @@ const Select = () => {
       <Input
         addonBefore="选择器变量名"
         placeholder="请输入选择器变量名"
-        value={selectorName}
+        defaultValue={selectorName}
         onChange={(e) => {
           setSelectorName(e.target.value);
         }}
@@ -38,7 +38,7 @@ const Parent = () => {
         <Input
           addonBefore="父级变量名"
           placeholder="请输入父级变量名"
-          value={parentName}
+          defaultValue={parentName}
           onChange={(e) => {
             setParentName(e.target.value);
           }}
