@@ -1,22 +1,29 @@
 import React from 'react';
-import { Layout, Divider } from 'antd';
+import { Layout } from 'antd';
 import Options from './components/Options';
 import Editor from './components/Editor';
+import useOptionsModel from '../../models/options';
 
 import styles from './index.module.less';
 
 const Index = () => {
+  const { editorHeight } = useOptionsModel();
+
   return (
-    <Layout.Content style={{ padding: '50px', marginTop: 64 }}>
-      <div className={styles.siteLayoutBackground} style={{ padding: 24 }}>
+    <Layout.Content>
+      <div
+        className={styles.siteLayoutBackground}
+        style={{ padding: 24 }}
+        id="header"
+      >
         <Options />
       </div>
-      <Divider />
+
       <div
         className={`${styles.siteLayoutBackground} ${styles.editorContainer}`}
-        style={{ padding: 24, height: 800 }}
+        style={{ padding: 0, height: editorHeight }}
       >
-        <Editor />
+        <Editor key={`editor_${editorHeight}`}/>
       </div>
     </Layout.Content>
   );
